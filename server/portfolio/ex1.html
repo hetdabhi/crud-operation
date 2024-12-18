@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Het Dabhi - Portfolio</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Smooth scrolling for internal links */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-top: 60px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        :root {
+            --background-color: #f4f4f4;
+            --text-color: #000000;
+            --nav-background-color: #ffffff;
+            --nav-text-color: #0c0b0b;
+            --highlight-color: #f39c12;
+            --contact-bg-color: #f7f7f7;
+            --contact-text-color: #000000;
+            --section-bg-color: #fff;
+            --section-text-color: #000000;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #080808;
+            --text-color: #f4f4f4;
+            --nav-background-color: #080808;
+            --nav-text-color: #f39c12;
+            --highlight-color: #f39c12;
+            --contact-bg-color: #080808;
+            --contact-text-color: #f4f4f4;
+            --section-bg-color: #080808;  /* Grey background for sections */
+            --section-text-color: #f4f4f4;  /* Light text color for dark mode */
+        }
+
+        h1, h2, h3, h4, p {
+            margin-bottom: 15px;
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            background-color: var(--nav-background-color);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        nav a {
+            color: var(--nav-text-color);
+            margin: 0 20px;
+            font-size: 18px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--highlight-color);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            padding: 5px 15px;
+            background: none;
+            border: 2px solid var(--highlight-color);
+            border-radius: 20px;
+            color: var(--highlight-color);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--highlight-color);
+            color: var(--nav-background-color);
+        }
+
+        /* Hero Section (Home) */
+        .hero {
+            text-align: center;
+            background-image: url('2.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #070606;
+            padding: 100px 20px;
+        }
+
+        .hero h1 {
+            font-size: 60px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+        }
+
+        .hero img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #f7f2f2;
+            margin-top: 20px;
+        }
+
+        .hero h3 {
+            font-size: 40px;
+            margin: 20px 0;
+        }
+
+        .hero h4 {
+            font-size: 22px;
+            font-style: italic;
+            color: #f39c12;
+        }
+
+        /* About Section */
+        #about {
+            padding: 60px 20px;
+            background-color: var(--section-bg-color);
+            color: var(--section-text-color);
+            text-align: center;
+        }
+
+        #about h2 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        #about p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--section-text-color);
+            line-height: 1.8;
+        }
+
+        /* Projects Section */
+        #projects {
+            padding: 60px 20px;
+            background-color: var(--section-bg-color);
+            color: var(--section-text-color);
+            text-align: center;
+        }
+
+        #projects h2 {
+            font-size: 50px;
+            margin-bottom: 40px;
+        }
+
+        .portfolio-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .portfolio-item {
+            background-color: #2d3436;
+            color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .portfolio-item h3 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 25px;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .portfolio-item:hover h3 {
+            opacity: 1;
+        }
+
+        /* Slideshow container */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 200px; /* Adjust as necessary */
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        /* Hide all images initially */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Show active image */
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 60px 20px;
+            background-color: var(--contact-bg-color);
+            color: var(--contact-text-color);
+            text-align: center;
+        }
+
+        #contact h2 {
+            font-size: 50px;
+            margin-bottom: 40px;
+        }
+
+        #contact form {
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #contact input, #contact textarea {
+            padding: 10px;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #contact button {
+            padding: 15px;
+            font-size: 18px;
+            background-color: #f39c12;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #contact button:hover {
+            background-color: #e67e22;
+        }
+        /* Thank You Section */
+        #thank-you {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #929292;
+        }
+
+        #thank-you h2 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        #thank-you p {
+            font-size: 18px;
+            color: #000000;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ffffff;
+            color: #130f0f;
+            text-align: center;
+            padding: 10px 0; /* Ensure spacing within the footer */
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        body {
+            padding-bottom: 60px; /* Adds space so content doesn't overlap the footer */
+        }
+
+        footer a {
+            color: #f39c12;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        footer a:hover {
+            color: #e67e22;
+        }
+        /* Responsive Design - Media Queries */
+
+/* For small screens like mobile */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero h2 {
+        font-size: 24px;
+    }
+
+    .portfolio-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .portfolio-item {
+        padding: 20px;
+    }
+
+    .hero img {
+        width: 120px;
+        height: 120px;
+    }
+
+    #about h2, #projects h2 {
+        font-size: 40px;
+    }
+
+    #contact h2 {
+        font-size: 40px;
+    }
+
+    #contact form {
+        width: 100%;
+    }
+
+    #contact input, #contact textarea {
+        font-size: 16px;
+    }
+
+    #contact button {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
+/* For very small screens like mobile portrait */
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero h2 {
+        font-size: 20px;
+    }
+
+    .portfolio-container {
+        grid-template-columns: 1fr;
+    }
+
+    .portfolio-item {
+        padding: 15px;
+    }
+
+    #about h2, #projects h2 {
+        font-size: 30px;
+    }
+
+    #contact h2 {
+        font-size: 30px;
+    }
+
+    #contact input, #contact textarea {
+        font-size: 14px;
+    }
+
+    #contact button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+    </style>
+</head>
+<body>
+    <body data-theme="light">
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" id="theme-toggle">Dark Mode</button>
+    </nav>
+
+    <!-- Hero Section (Home) -->
+    <div id="home" class="hero">
+        <h1 id="hello-text"></h1>
+        <h2 id="welcome-text"></h2>
+        <img src="Het Dabhi.jpg" alt="Het Dabhi">
+        <b><h3>HET DABHI</h3></b>
+        <h4>Software Developer</h4>
+    </div>
+
+    <!-- About Section -->
+    <div id="about">
+        <h2>About Me</h2>
+        <p>Hello! I am Het Dabhi, a passionate software developer with a keen interest in web development, mobile apps, and emerging technologies. I thrive on solving complex problems and building innovative solutions. My skills span across various programming languages and frameworks, and I am always eager to learn and grow in this ever-evolving field.</p>
+    </div>
+
+    <!-- Projects Section -->
+    <div id="projects">
+        <h2>My Projects</h2>
+        <div class="portfolio-container">
+            <!-- Project 1 -->
+            <div class="portfolio-item">
+                <div class="slideshow-container">
+                    <div class="slide">
+                        <img src="11.jpg" alt="Project 1 Image 1">
+                    </div>
+                    <div class="slide">
+                        <img src="14.jpg" alt="Project 1 Image 2">
+                    </div>
+                </div>
+                <h3>Project 1</h3>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="portfolio-item">
+                <div class="slideshow-container">
+                    <div class="slide">
+                        <img src="12.jpg" alt="Project 2 Image 1">
+                    </div>
+                    <div class="slide">
+                        <img src="15.jpg" alt="Project 2 Image 2">
+                    </div>
+                </div>
+                <h3>Project 2</h3>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="portfolio-item">
+                <div class="slideshow-container">
+                    <div class="slide">
+                        <img src="13.jpg" alt="Project 3 Image 1">
+                    </div>
+                    <div class="slide">
+                        <img src="16.jpg" alt="Project 3 Image 2">
+                    </div>
+                </div>
+                <h3>Project 3</h3>
+            </div>
+        </div>
+    </div>
+
+   <!-- Contact Section -->
+   <div id="contact">
+        <h2>Contact Me</h2>
+        <form id="contact-form" action="mailto:example@example.com" method="POST">
+            <input type="text" name="name" id="name" placeholder="Your Name" required>
+            <input type="email" name="email" id="email" placeholder="Your Email" required>
+            <textarea name="message" id="message" rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+    <!-- Thank You Section -->
+    <div id="thank-you">
+        <h2>Thank You!</h2>
+        <p>Your message has been sent. I will get back to you soon!</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 | Designed by Het Dabhi | <a href="mailto:hetdabhi2@gmail.com" target="_blank">Contact Me</a> | <a href="https://github.com/hetdabhi" target="_blank">GitHub</a></p>
+    </footer>
+  
+    <script>
+        // Typing Effect
+        const helloText = "HELLO";
+        const welcomeText = "Welcome to My Portfolio";
+    
+        let helloIndex = 0;
+        let welcomeIndex = 0;
+    
+        function typeText(element, text, index, callback) {
+            if (index < text.length) {
+                element.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(() => typeText(element, text, index, callback), 150);
+            } else if (callback) {
+                callback();
+            }
+        }
+    
+        // Theme Toggle Script
+        const themeToggleButton = document.getElementById('theme-toggle');
+        themeToggleButton.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            document.body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        });
+    
+        // Slideshow Script
+        document.querySelectorAll('.slideshow-container').forEach(container => {
+            const slides = container.querySelectorAll('.slide');
+            let currentIndex = 0;
+    
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) slide.classList.add('active');
+                });
+            }
+    
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                showSlide(currentIndex);
+            }
+    
+            showSlide(currentIndex);
+            setInterval(nextSlide, 3000);
+        });
+    
+        // JavaScript to handle form submission and show thank you message
+        const form = document.getElementById('contact-form');
+        const thankYouSection = document.getElementById('thank-you');
+        const contactSection = document.getElementById('contact');
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent form submission (you can handle actual form submission here)
+    
+            // Hide the contact form
+            contactSection.style.display = 'none';
+    
+            // Show the thank you message
+            thankYouSection.style.display = 'block';
+        });
+    
+        // Function to automatically scroll to the next section
+        function autoScroll() {
+            const sections = document.querySelectorAll('div[id^="home"], div[id^="about"], div[id^="projects"], div[id^="contact"]');
+            let currentSectionIndex = 0;
+    
+            function scrollToNextSection() {
+                if (currentSectionIndex < sections.length) {
+                    sections[currentSectionIndex].scrollIntoView({ behavior: 'smooth' });
+                    currentSectionIndex++;
+                } else {
+                    currentSectionIndex = 0; // Reset to the first section once all sections are visited
+                }
+            }
+    
+            setInterval(scrollToNextSection, 5000); // Scroll every 5 seconds
+        }
+    
+        // Start auto-scrolling and typing effect when the page loads
+        window.onload = function() {
+            autoScroll();
+    
+            const helloElement = document.getElementById('hello-text');
+            const welcomeElement = document.getElementById('welcome-text');
+    
+            typeText(helloElement, helloText, helloIndex, () => {
+                typeText(welcomeElement, welcomeText, welcomeIndex);
+            });
+        };
+    </script>
+    
+</body>
+</html>
